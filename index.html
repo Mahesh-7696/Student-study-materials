@@ -1,0 +1,823 @@
+KSRM College of Engineering Mail	Mahesh <249y1a05a9@ksrmce.ac.in>
+(no subject)
+Mahesh <249y1a05a9@ksrmce.ac.in>	Tue, Apr 7, 2026 at 11:52 AM
+To: Mahesh <249y1a05a9@ksrmce.ac.in>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KSRM Engineering Library | Student Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Poppins','Segoe UI',sans-serif;background-color:#f0f2f5;color:#444;overflow-x:hidden}
+        body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background-image:radial-gradient(circle,#d4d4d8 1px,transparent 1px);background-size:30px 30px;opacity:.3;z-index:-1}
+
+        /* ===== LOGIN MODAL ===== */
+        .login-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .5s ease,visibility .5s ease;opacity:0;visibility:hidden;pointer-events:none}
+        .login-overlay.visible{opacity:1;visibility:visible;pointer-events:all}
+        .login-card{background:white;border-radius:24px;padding:40px 36px;width:440px;max-width:94vw;box-shadow:0 25px 80px rgba(0,0,0,.3);position:relative;z-index:10;animation:lsu .5s ease;max-height:92vh;overflow-y:auto}
+        @keyframes lsu{from{opacity:0;transform:translateY(40px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+        .login-card::-webkit-scrollbar{width:4px}
+        .login-card::-webkit-scrollbar-thumb{background:#ddd;border-radius:4px}
+        .login-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:none;background:#f5f5f5;color:#999;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .3s}
+        .login-close:hover{background:#fee;color:#e74c3c;transform:rotate(90deg)}
+        .login-logo{width:76px;height:76px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:1.9rem;color:white;box-shadow:0 8px 25px rgba(102,126,234,.4)}
+        .login-card h2{text-align:center;color:#333;font-size:1.45rem;font-weight:700;margin-bottom:3px}
+        .login-card .subtitle{text-align:center;color:#aaa;font-size:.85rem;margin-bottom:28px}
+        .form-group{margin-bottom:18px}
+        .form-group label{display:block;font-size:.8rem;font-weight:600;color:#666;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+        .input-wrapper{position:relative}
+        .input-wrapper>i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#bbb;font-size:.95rem;transition:color .3s;pointer-events:none}
+        .form-input{width:100%;padding:13px 46px;border:2px solid #eee;border-radius:12px;font-size:.95rem;font-family:'Poppins',sans-serif;color:#333;outline:none;transition:border-color .3s,box-shadow .3s;background:#fafafa}
+        .form-input:focus{border-color:#764ba2;box-shadow:0 0 0 4px rgba(118,75,162,.1);background:white}
+        .form-input.error{border-color:#e74c3c;box-shadow:0 0 0 4px rgba(231,76,60,.1)}
+        .toggle-pass{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:#bbb;cursor:pointer;font-size:.95rem;padding:4px;transition:color .3s}
+        .toggle-pass:hover{color:#764ba2}
+        .error-msg{color:#e74c3c;font-size:.77rem;margin-top:5px;display:none;align-items:center;gap:5px}
+        .error-msg.show{display:flex}
+        .login-btn{width:100%;padding:14px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border:none;border-radius:12px;font-size:1rem;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;transition:all .3s;box-shadow:0 6px 20px rgba(102,126,234,.35);margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px}
+        .login-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(102,126,234,.45)}
+        .login-btn:active{transform:translateY(0)}
+        .login-btn.loading{pointer-events:none;opacity:.8}
+        .login-btn .spinner{display:none;width:20px;height:20px;border:2.5px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite}
+        .login-btn.loading .spinner{display:block}
+        .login-btn.loading .btn-text{display:none}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .login-footer{text-align:center;margin-top:18px;font-size:.78rem;color:#aaa;line-height:1.6}
+        .login-footer strong{color:#764ba2}
+        .demo-creds{background:#f8f7ff;border:1px dashed #ddd;border-radius:10px;padding:12px 14px;margin-top:14px;font-size:.76rem;color:#888}
+        .demo-creds h4{font-size:.76rem;color:#764ba2;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+        .cred-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0}
+        .cred-row span:first-child{font-weight:600;font-size:.8rem;color:#555}
+        .fill-btn{background:#764ba2;color:white;border:none;padding:3px 12px;border-radius:6px;font-size:.68rem;cursor:pointer;font-family:'Poppins',sans-serif;transition:opacity .2s}
+        .fill-btn:hover{opacity:.8}
+        .range-note{text-align:center;margin-top:10px;font-size:.72rem;color:#aaa;font-style:italic}
+
+        /* ===== TOP BAR ===== */
+        .top-bar{background:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 15px rgba(0,0,0,.06);position:sticky;top:0;z-index:100}
+        .top-bar-left{display:flex;align-items:center;gap:14px}
+        .top-logo{width:42px;height:42px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.15rem;flex-shrink:0}
+        .top-brand{font-weight:700;color:#333;font-size:1.05rem;line-height:1.2}
+        .top-brand-sub{font-size:.72rem;color:#aaa;font-weight:400}
+        .top-bar-right{display:flex;align-items:center;gap:10px}
+        .session-timer{font-size:.78rem;color:#888;background:#f5f5f5;padding:6px 14px;border-radius:20px;display:none;align-items:center;gap:6px}
+        .session-timer.show{display:flex}
+        .session-timer i{color:#43e97b;font-size:.5rem}
+        .user-chip{display:none;align-items:center;gap:10px;background:#f8f7ff;padding:5px 14px 5px 5px;border-radius:30px}
+        .user-chip.show{display:flex}
+        .user-chip-avatar{width:34px;height:34px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:.85rem}
+        .user-chip-info{font-size:.78rem;color:#555;line-height:1.3}
+        .user-chip-info strong{display:block;font-size:.82rem;color:#333}
+        .login-trigger{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border:none;padding:9px 22px;border-radius:30px;font-size:.85rem;font-family:'Poppins',sans-serif;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:7px;box-shadow:0 4px 15px rgba(102,126,234,.3)}
+        .login-trigger:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(102,126,234,.45)}
+        .logout-btn{display:none;background:none;border:2px solid #eee;color:#888;padding:8px 18px;border-radius:10px;font-size:.85rem;font-family:'Poppins',sans-serif;font-weight:500;cursor:pointer;transition:all .3s;align-items:center;gap:6px}
+        .logout-btn.show{display:flex}
+        .logout-btn:hover{border-color:#e74c3c;color:#e74c3c;background:#fef5f5}
+
+        /* ===== HERO ===== */
+        .hero{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:55px 20px 70px;text-align:center;border-bottom-left-radius:60px;border-bottom-right-radius:60px;box-shadow:0 10px 40px rgba(102,126,234,.4);position:relative;overflow:hidden}
+        .hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 60%);animation:hp 6s ease-in-out infinite}
+        @keyframes hp{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.1);opacity:.8}}
+        .hero-badge{display:inline-block;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);padding:6px 20px;border-radius:30px;font-size:.8rem;font-weight:500;letter-spacing:1px;text-transform:uppercase;margin-bottom:15px;border:1px solid rgba(255,255,255,.3)}
+        .hero h1{font-size:2.6rem;font-weight:800;text-shadow:2px 3px 6px rgba(0,0,0,.25);position:relative;line-height:1.2}
+        .hero p{font-size:1.1rem;margin-top:10px;opacity:.9;font-weight:300;position:relative}
+        .hero p .login-cta{color:#ffd700;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px;transition:color .3s}
+        .hero p .login-cta:hover{color:#fff}
+        .hero-stats{display:flex;justify-content:center;gap:40px;margin-top:25px;position:relative}
+        .hero-stats div{text-align:center}
+        .hero-stats .num{font-size:1.8rem;font-weight:700}
+        .hero-stats .label{font-size:.75rem;opacity:.8;text-transform:uppercase;letter-spacing:.5px}
+
+        /* ===== SEARCH ===== */
+        .search-container{max-width:600px;margin:-30px auto 0;position:relative;z-index:10;padding:0 20px}
+        .search-box{display:flex;background:white;border-radius:50px;box-shadow:0 8px 30px rgba(0,0,0,.12);overflow:hidden}
+        .search-box input{flex:1;border:none;outline:none;padding:16px 25px;font-size:1rem;font-family:'Poppins',sans-serif;color:#333}
+        .search-box input::placeholder{color:#aaa}
+        .search-box button{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border:none;padding:16px 30px;cursor:pointer;font-size:1.1rem;transition:opacity .3s}
+        .search-box button:hover{opacity:.85}
+
+        /* ===== NAV ===== */
+        .nav-container{display:flex;justify-content:center;flex-wrap:wrap;margin:30px auto 0;padding:0 20px;gap:8px}
+        .nav-btn{background:white;color:#764ba2;text-decoration:none;padding:10px 22px;border-radius:30px;font-weight:600;font-size:.88rem;box-shadow:0 4px 12px rgba(0,0,0,.08);transition:all .3s;border:2px solid transparent;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+        .nav-btn:hover,.nav-btn.active{transform:translateY(-3px);border-color:#764ba2;box-shadow:0 6px 20px rgba(118,75,162,.25);background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white}
+        .nav-btn i{font-size:.9rem}
+
+        /* ===== BOOK GRID ===== */
+        .container{max-width:1280px;margin:40px auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:28px}
+        .card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.06);transition:transform .35s,box-shadow .35s;position:relative;opacity:0;transform:translateY(30px)}
+        .card.visible{opacity:1;transform:translateY(0)}
+        .card-count{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.25);backdrop-filter:blur(8px);color:white;padding:4px 14px;border-radius:20px;font-size:.75rem;font-weight:600}
+        .card-header{padding:22px 24px;color:white;font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden}
+        .card-header::after{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:rgba(255,255,255,.1);border-radius:50%}
+        .card-header i{font-size:1.5rem}
+        .theme-cse{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)}
+        .theme-ece{background:linear-gradient(135deg,#43e97b 0%,#38f9d7 100%)}
+        .theme-mech{background:linear-gradient(135deg,#fa709a 0%,#fee140 100%)}
+        .theme-civil{background:linear-gradient(135deg,#a18cd1 0%,#fbc2eb 100%)}
+        .theme-eee{background:linear-gradient(135deg,#f6d365 0%,#fda085 100%)}
+        .theme-it{background:linear-gradient(135deg,#89f7fe 0%,#66a6ff 100%)}
+        .theme-aiml{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%)}
+        .theme-mba{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)}
+        .theme-common{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)}
+        .card-body{padding:0;max-height:520px;overflow-y:auto}
+        .card-body::-webkit-scrollbar{width:4px}
+        .card-body::-webkit-scrollbar-thumb{background:#ddd;border-radius:4px}
+        .book-item{display:flex;align-items:center;padding:14px 20px;border-bottom:1px solid #f3f3f3;text-decoration:none;color:#555;transition:all .25s;gap:14px}
+        .book-item:last-child{border-bottom:none}
+        .book-item:hover{background:linear-gradient(to right,#f8f7ff 0%,#f0f2f5 100%);color:#333;padding-left:26px}
+        .book-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:1rem;flex-shrink:0}
+        .bg-cse{background:linear-gradient(135deg,#4facfe,#00f2fe)}
+        .bg-ece{background:linear-gradient(135deg,#43e97b,#38f9d7)}
+        .bg-mech{background:linear-gradient(135deg,#fa709a,#fee140)}
+        .bg-civil{background:linear-gradient(135deg,#a18cd1,#fbc2eb)}
+        .bg-eee{background:linear-gradient(135deg,#f6d365,#fda085)}
+        .bg-it{background:linear-gradient(135deg,#89f7fe,#66a6ff)}
+        .bg-aiml{background:linear-gradient(135deg,#f093fb,#f5576c)}
+        .bg-mba{background:linear-gradient(135deg,#4facfe,#00f2fe)}
+        .bg-common{background:linear-gradient(135deg,#667eea,#764ba2)}
+        .book-info{flex:1;min-width:0}
+        .book-info h3{margin:0;font-size:.92rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .book-info p{margin:2px 0 0;font-size:.78rem;color:#aaa}
+        .book-arrow{color:#ccc;font-size:.8rem;transition:all .25s;flex-shrink:0}
+        .book-item:hover .book-arrow{color:#764ba2;transform:translateX(4px)}
+        .no-results{grid-column:1/-1;text-align:center;padding:60px 20px;color:#aaa}
+        .no-results i{font-size:3rem;margin-bottom:15px;display:block}
+
+        /* ===== TOAST ===== */
+        .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#333;color:white;padding:12px 28px;border-radius:30px;font-size:.9rem;box-shadow:0 8px 25px rgba(0,0,0,.2);transition:transform .4s;z-index:10001;white-space:nowrap}
+        .toast.show{transform:translateX(-50%) translateY(0)}
+
+        /* ===== BACK TOP ===== */
+        .back-top{position:fixed;bottom:30px;right:30px;width:48px;height:48px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border:none;border-radius:50%;cursor:pointer;font-size:1.1rem;box-shadow:0 5px 20px rgba(102,126,234,.4);display:none;align-items:center;justify-content:center;z-index:99;transition:transform .3s}
+        .back-top:hover{transform:scale(1.1)}
+
+        footer{text-align:center;padding:35px 20px;color:#999;font-size:.85rem;background:white;margin-top:50px;border-top:1px solid #eee}
+
+        @keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-10px)}30%{transform:translateX(10px)}45%{transform:translateX(-10px)}60%{transform:translateX(10px)}75%{transform:translateX(-5px)}90%{transform:translateX(5px)}}
+
+        @media(max-width:768px){
+            .hero h1{font-size:1.7rem}
+            .hero p{font-size:.95rem}
+            .hero-stats{gap:18px}
+            .hero-stats .num{font-size:1.3rem}
+            .container{grid-template-columns:1fr}
+            .nav-btn{padding:8px 14px;font-size:.78rem}
+            .login-card{padding:28px 22px}
+            .top-bar{flex-wrap:wrap;gap:10px;padding:10px 15px}
+            .session-timer{display:none!important}
+            .user-chip-info{display:none}
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== LOGIN MODAL (hidden by default) ===== -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+        <button class="login-close" onclick="closeLogin()"><i class="fas fa-times"></i></button>
+        <div class="login-logo"><i class="fas fa-university"></i></div>
+        <h2>KSRM Library Portal</h2>
+        <p class="subtitle">Student Authentication   2024 Batch</p>
+
+        <form id="loginForm" onsubmit="return handleLogin(event)">
+            <div class="form-group">
+                <label for="rollNo">Roll Number</label>
+                <div class="input-wrapper">
+                    <input type="text" id="rollNo" class="form-input" placeholder="e.g. 249Y1A0502" autocomplete="off" required>
+                    <i class="fas fa-id-card"></i>
+                </div>
+                <div class="error-msg" id="rollError"><i class="fas fa-exclamation-circle"></i> <span></span></div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                    <i class="fas fa-lock"></i>
+                    <button type="button" class="toggle-pass" onclick="togglePassword()"><i class="fas fa-eye" id="eyeIcon"></i></button>
+                </div>
+                <div class="error-msg" id="passError"><i class="fas fa-exclamation-circle"></i> <span></span></div>
+            </div>
+            <button type="submit" class="login-btn" id="loginBtn">
+                <span class="btn-text"><i class="fas fa-sign-in-alt"></i> Login to Library</span>
+                <div class="spinner"></div>
+            </button>
+        </form>
+
+        <div class="login-footer">
+            Use your <strong>249Y1A</strong> series KSRM credentials<br>
+            Format: <strong>249Y1A____</strong> &nbsp;|&nbsp; Contact <strong>librarian@ksrm.ac.in</strong> for help
+        </div>
+
+        <div class="demo-creds">
+            <h4><i class="fas fa-info-circle"></i> Quick Demo   Click to Auto-Fill</h4>
+            <div class="cred-row"><span>249Y1A0502   CSE</span><button type="button" class="fill-btn" onclick="fillCreds('249Y1A0502','ksrm@123')">Fill</button></div>
+            <div class="cred-row"><span>249Y1A0503   CSE</span><button type="button" class="fill-btn" onclick="fillCreds('249Y1A0503','ksrm@123')">Fill</button></div>
+            <div class="cred-row"><span>249Y1A0201   ECE</span><button type="button" class="fill-btn" onclick="fillCreds('249Y1A0201','ksrm@123')">Fill</button></div>
+            <div class="cred-row"><span>249Y1A0301   EEE</span><button type="button" class="fill-btn" onclick="fillCreds('249Y1A0301','ksrm@123')">Fill</button></div>
+            <div class="cred-row"><span>249Y1A1001   MECH</span><button type="button" class="fill-btn" onclick="fillCreds('249Y1A1001','ksrm@123')">Fill</button></div>
+            <div class="cred-row"><span>249Y1A1301   CIVIL</span><button type="button" class="fill-btn" onclick="fillCreds('249Y1A1301','ksrm@123')">Fill</button></div>
+            <div class="cred-row"><span>249Y1A3101   IT</span><button type="button" class="fill-btn" onclick="fillCreds('249Y1A3101','ksrm@123')">Fill</button></div>
+            <div class="cred-row"><span>249Y1A0601   AIML</span><button type="button" class="fill-btn" onclick="fillCreds('249Y1A0601','ksrm@123')">Fill</button></div>
+            <div class="cred-row"><span>249Y1A5701   MBA</span><button type="button" class="fill-btn" onclick="fillCreds('249Y1A5701','ksrm@123')">Fill</button></div>
+            <p class="range-note">CSE Range: 249Y1A0502 ? 249Y1A05M9 | All passwords: ksrm@123</p>
+        </div>
+    </div>
+</div>
+
+<!-- ===== TOP BAR ===== -->
+<div class="top-bar">
+    <div class="top-bar-left">
+        <div class="top-logo"><i class="fas fa-university"></i></div>
+        <div>
+            <div class="top-brand">KSRM Engineering Library</div>
+            <div class="top-brand-sub">Digital Resource Portal   2024</div>
+        </div>
+    </div>
+    <div class="top-bar-right">
+        <div class="session-timer" id="sessionTimerWrap"><i class="fas fa-circle"></i><span id="sessionTimer">Session: 00:00</span></div>
+        <div class="user-chip" id="userChip">
+            <div class="user-chip-avatar" id="userAvatar">U</div>
+            <div class="user-chip-info">
+                <strong id="userName">Student</strong>
+                <span id="userMeta">Loading...</span>
+            </div>
+        </div>
+        <button class="login-trigger" id="loginTriggerBtn" onclick="openLogin()"><i class="fas fa-sign-in-alt"></i> Student Login</button>
+        <button class="logout-btn" id="logoutBtn" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+</div>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+    <div class="hero-badge"><i class="fas fa-book-open"></i> &nbsp;Digital Library Portal</div>
+    <h1>KSRM COLLEGE OF ENGINEERING</h1>
+    <p>Central Digital Library   Free Textbooks for Every Branch &nbsp;|&nbsp; <span class="login-cta" onclick="openLogin()">Login for personalized access <i class="fas fa-arrow-right"></i></span></p>
+    <div class="hero-stats">
+        <div><div class="num" id="bookCount">0</div><div class="label">Books</div></div>
+        <div><div class="num">9</div><div class="label">Branches</div></div>
+        <div><div class="num">Free</div><div class="label">Access</div></div>
+    </div>
+</header>
+
+<!-- ===== SEARCH ===== -->
+<div class="search-container">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search books by name, subject...">
+        <button onclick="searchBooks()"><i class="fas fa-search"></i></button>
+    </div>
+</div>
+
+<!-- ===== BRANCH NAV ===== -->
+<nav class="nav-container" id="navBar">
+    <a href="javascript:void(0)" class="nav-btn active" data-filter="all"><i class="fas fa-th-large"></i> All</a>
+    <a href="javascript:void(0)" class="nav-btn" data-filter="cse"><i class="fas fa-laptop-code"></i> CSE</a>
+    <a href="javascript:void(0)" class="nav-btn" data-filter="it"><i class="fas fa-network-wired"></i> IT</a>
+    <a href="javascript:void(0)" class="nav-btn" data-filter="aiml"><i class="fas fa-robot"></i> AI/ML</a>
+    <a href="javascript:void(0)" class="nav-btn" data-filter="ece"><i class="fas fa-broadcast-tower"></i> ECE</a>
+    <a href="javascript:void(0)" class="nav-btn" data-filter="eee"><i class="fas fa-bolt"></i> EEE</a>
+    <a href="javascript:void(0)" class="nav-btn" data-filter="mech"><i class="fas fa-cogs"></i> Mech</a>
+    <a href="javascript:void(0)" class="nav-btn" data-filter="civil"><i class="fas fa-hard-hat"></i> Civil</a>
+    <a href="javascript:void(0)" class="nav-btn" data-filter="mba"><i class="fas fa-chart-line"></i> MBA</a>
+    <a href="javascript:void(0)" class="nav-btn" data-filter="common"><i class="fas fa-book"></i> Common</a>
+</nav>
+
+<!-- ===== BOOK GRID ===== -->
+<div class="container" id="bookGrid"></div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <p>&copy; 2024 KSRM College of Engineering   Digital Library System</p>
+    <p style="margin-top:6px;">All books link to free, open-source educational resources (NPTEL / Archive.org)</p>
+    <p style="margin-top:6px;">Designed with <i class="fas fa-heart" style="color:#fa709a"></i> for Students</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
+
+<script>
+// ============================================================
+//  CSE ROLL GENERATOR: 249Y1A0502 ? 249Y1A05M9
+// ============================================================
+const hexDigits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+function hexToVal(h){ return hexDigits.indexOf(h.toUpperCase()); }
+function valToHex(v){ return hexDigits[v]; }
+function generateCSERolls(){
+    const rolls = [];
+    for(let d3 = 0; d3 <= hexToVal('M'); d3++){
+        let startD4 = (d3 === 0) ? hexToVal('2') : 0;
+        for(let d4 = startD4; d4 <= 35; d4++){
+            const roll = '249Y1A05' + valToHex(d3) + valToHex(d4);
+            if(roll > '249Y1A05M9') break;
+            rolls.push(roll);
+        }
+    }
+    return rolls;
+}
+const cseRollNumbers = generateCSERolls();
+
+// ============================================================
+//  STUDENT DATABASE
+// ============================================================
+const students = [];
+const cseNames = [
+    'Ravi Kumar','Priya Sharma','Arjun Reddy','Sneha Gupta','Vijay Bhaskar',
+    'Anjali Nair','Karthik Rao','Divya Sri','Rahul Verma','Meera Joshi',
+    'Suresh Babu','Lavanya Kumari','Nikhil Singh','Pooja Reddy','Deepak Yadav',
+    'Tanmay Agarwal','Swathi Kumari','Aditya Sharma','Neha Kapoor','Varun Krishna',
+    'Sanjay Muthu','Rekha Devi','Ashok Raj','Praveen Kumar','Venkat Rao',
+    'Sravanthi G','Bhavya Sree','Kavitha Rajan','Arun Prasad','Rohan Das',
+    'Isha Patel','Manoj Kumar','Ramesh Babu','Siva Naga','Lakshmi Priya',
+    'Harsha Vardhan','Sirisha Devi','Naveen Kumar','Ramya Sri','Phani Kumar',
+    'Tejaswini M','Sai Kiran','Anusha Reddy','Bala Raju','Madhuri Latha',
+    'Ganesh Kumar','Sruthi Reddy','Dinesh Kumar','Swarna Latha','Rajesh Kumar',
+    'Jyothirmai P','Sumanth Reddy','Kalyani Devi','Vamsi Krishna','Sindhuja R',
+    'Prasanna Kumar','Hema Latha','Srikanth Reddy','Padmavathi K','Ravi Teja',
+    'Chaitanya S','Annapurna D','Bharath Reddy','Sujatha M','Kiran Kumar',
+    'Amala Priya','Bharath Kumar','Chandra Mohan','Deepika Reddy','Eswar Rao',
+    'Faiz Ahmed','Geetha Sri','Hari Prasad','Indira Devi','Jagadeesh Babu',
+    'Koushik Reddy','Lalitha Kumari','Mahesh Babu','Nandini Reddy','Om Prakash',
+    'Padma Priya','Qadir Hussain','Rajya Lakshmi','Sateesh Kumar','Usha Rani',
+    'Vasanth Kumar','Winny Rose','Xavier Raj','Yamini Devi','Zubair Khan',
+    'Anil Kumar','Bhanu Rekha','Charan Teja','Durga Bhavani','Eswari Devi',
+    'Gopi Krishna','Hari Krishna','Irene Mary','Jagan Mohan','Kamala Devi',
+    'Lakshman Rao','Madhavi Latha','Nagarjuna Reddy','Obulesh Babu','Prabhakar Rao',
+    'Qasim Raza','Renuka Devi','Shankar Reddy','Thrilok Kumar','Uma Devi',
+    'Vijayalakshmi','Waseem Akram','Yaswanth Reddy','Zeenath Fatima','Arun Kumar',
+    'Bhagya Sri','Chitra Devi','Damodhar Rao','Eeranna Reddy','Fathima Bee',
+    'Girija Shankar','Hemanth Kumar','Abhiram Reddy','Bala Murali','Chandra Shekar',
+    'Dasaradh Reddy','Eswara Rao','Farooq Ahmed','Ganesh Reddy','Hemanth Reddy',
+    'Iliyas Khan','Javed Basha','Konda Reddy','Laxmi Kanth','Malla Reddy',
+    'Narsimha Reddy','Omkar Reddy','Pavan Kumar','Qamar Hussain','Raja Shekhar',
+    'Sambaiah Reddy','Thirumala Reddy','Uday Kiran','Vamsi Reddy','Waseem Shah',
+    'Yadaiah Reddy','Zubair Vali','Anil Reddy','Bhaskar Reddy','Chennakesava R',
+    'Durga Prasad','Eeda Suresh','Firoz Basha','Gayathri Devi','Hanumanthu R',
+    'Ibrahim Khan','Jyothi Reddy','Krishna Murthy','Lakshmi Narayana','Madhu Sudhana',
+    'Nageswara Rao','Pavani Sri','Raghavendra R','Siva Ramulu','Triveni Devi',
+    'Udaya Bhaskar','Vijaya Kumar','Wahid Basha','Yasaswi Reddy','Zaffer Basha',
+    'Anusha Kumar','Bhupal Reddy','Chandra Sekhar','Devi Prasad','Elugu Ravi',
+    'Farida Begum','Giri Babu','Harika Sri','Iswarya Devi','Ayyappa Reddy',
+    'Bhagya Laxmi','Chandra Kanth','Dhanalakshmi D','Eswari Bai','Fatima Khatoon',
+    'Ganapathi Reddy','Hanumakonda R','Indira Kumari','Janga Reddy','Kalavathi Devi',
+    'Lakshmana Reddy','Mallika Devi','Narayana Reddy','Omkari Devi','Pothula Reddy',
+    'Qamar Jahan','Raghuram Reddy','Subba Reddy','Thimmappa Naidu','Usha Kumari',
+    'Vijaya Nirmala','Wahida Begum','Yadagiri Reddy','Zareena Bee','Ananta Reddy',
+    'Buchi Reddy','Chilukuri Devi','Donthu Reddy','Elisetty R','Guduru Reddy',
+    'Hanumanth Reddy','Imam Saheb','Jammula Reddy','Kandula Reddy','Lakshmi Devi',
+    'Muthyala Reddy','Nallapu Reddy','Peda Reddy','Rachakonda R','Siddhardha Reddy',
+    'Thota Naidu','Uppunutla Reddy','Veerabhadra R','Wadiyar Reddy','Yerrabelly Reddy',
+    'Zubeda Bee','Akula Reddy','Burra Reddy','Chintala Reddy','Dokula Reddy',
+    'Erra Reddy','Gajjala Reddy','Hanji Reddy','Illa Reddy','Juturu Reddy',
+    'Koppula Reddy','Lakkidi Reddy','Maddi Reddy','Nadikuda Reddy','Puli Reddy',
+    'Reddigari Reddy','Sangam Reddy','Thuraka Reddy','Abhilash Reddy','Bhanu Sri',
+    'Charan Reddy','Dharani Priya','Eswar Sai','Farhana Begum','Gopinath Reddy',
+    'Hari Sai','Ishaq Basha','Jahnavi Sri','Kiran Sai','Lavanya Reddy',
+    'Mani Kumar','Naga Sri','Omkar Sai','Pavan Sai','Qadir Ali','Ramya Sri',
+    'Sai Kumar','Tarun Reddy','Uma Sai','Vamsi Sai','Wasim Akram','Yashwanth Sai',
+    'Zeenath Sultana','Anudeep Sai','Bhavana Sai','Chakri Sai','Divya Sai',
+    'Eerla Sai','Goutham Sai','Harsha Sai','Isha Sai','Jai Sai','Karthik Sai',
+    'Likhith Sai','Mohan Sai','Nithin Sai','Ooha Sai','Pranav Sai','Rithik Sai',
+    'Sujith Sai','Tanuj Sai','Uday Sai','Vishal Sai','Walter Sai','Yash Sai',
+    'Zoya Sai','Arjun Sai','Bala Sai','Charan Sai','Deepak Sai','Eswar Sai',
+    'Farhan Sai','Giri Sai','Hemanth Sai','Irfan Sai','Jagadeesh Sai','Kumar Sai',
+    'Lakshman Sai','Murali Sai','Naveen Sai','Pradeep Sai','Raju Sai','Suresh Sai',
+    'Tharun Sai','Aadhya Reddy','Bhavani Shankar','Chaitanya Reddy','Dinesh Sai',
+    'Eshwar Reddy','Farheen Sultana','Girish Kumar','Himabindu Sri','Ishaan Reddy',
+    'Janaki Devi','Kavya Sri','Lalith Kumar','Meghana Reddy','Nithish Kumar',
+    'Oorvasi Reddy','Praneeth Reddy','Qasim Basha','Rakshitha Reddy','Sai Prasad',
+    'Tejaswi Reddy','Ujjwal Kumar','Vaishnavi Reddy','Wajid Khan','Yamini Reddy',
+    'Zaheer Basha','Ankith Reddy','Bhuvana Sri','Chandra Sai','Durga Sai',
+    'Eshwar Sai','Gana Sai','Hari Sai','Indira Sai','Jagan Sai','Kalyan Sai',
+    'Lohith Sai','Mounika Sai','Nagasai','Prasad Sai','Ravi Sai','Sai Ram',
+    'Tharun Sai','Usha Sai','Vamsi Sai','Waseem Sai','Yash Sai','Zain Sai',
+    'Abhi Sai','Bobby Sai','Cherry Sai','Don Sai','Eshwar Sai','Fazil Sai',
+    'Gokul Sai','Hari Sai','Irfan Sai','Jeevan Sai','Kiran Sai','Leo Sai',
+    'Mahi Sai','Nani Sai','Pandu Sai','Ramu Sai','Shankar Sai','Tabbu Sai',
+    'Anand Kumar','Bhargavi Devi','Chandra Mouli','Divya Lakshmi','Eswar Prasad',
+    'Fathima Khan','Ganesh Kumar','Harika Devi','Ibrahim Khan','Jayanthi Devi',
+    'Kumar Raju','Lalitha Priya','Mahesh Babu','Nagaratna Devi','Omkar Prasad',
+    'Padmavathi Devi','Ramesh Babu','Sujatha Devi','Thirupathi B','Usha Devi',
+    'Venkat Prasad','Wahida Begum','Yadagiri B','Zareena Khan','Annapurna Devi',
+    'Bhaskar Rao','Chandra Devi','Durga Rao','Eswara Devi','Farooq Basha',
+    'Girija Devi','Harish Babu','Ilaiah B','Jyothi Devi','Kondaiah B',
+    'Lakshmamma D','Malla Reddy'
+];
+cseRollNumbers.forEach((roll, i) => {
+    if(i < cseNames.length) students.push({ roll, password: 'ksrm@123', name: cseNames[i], branch: 'CSE', year: '1st Year', section: 'A' });
+});
+
+function addStudents(prefix, dept, names) {
+    names.forEach((name, i) => {
+        const num = String(parseInt(prefix) + i).padStart(4, '0');
+        students.push({ roll: '249Y1A' + num, password: 'ksrm@123', name, branch: dept, year: '1st Year', section: 'A' });
+    });
+}
+addStudents('0201', 'ECE', [
+    'Amala Priya','Bharath Kumar','Chandra Mohan','Deepika Reddy','Eswar Rao',
+    'Faiz Ahmed','Geetha Sri','Hari Prasad','Indira Devi','Jagadeesh Babu',
+    'Koushik Reddy','Lalitha Kumari','Mahesh Babu','Nandini Reddy','Om Prakash',
+    'Padma Priya','Qadir Hussain','Rajya Lakshmi','Sateesh Kumar','Usha Rani',
+    'Vasanth Kumar','Winny Rose','Xavier Raj','Yamini Devi','Zubair Khan',
+    'Anil Kumar','Bhanu Rekha','Charan Teja','Durga Bhavani','Eswari Devi',
+    'Gopi Krishna','Hari Krishna','Irene Mary','Jagan Mohan','Kamala Devi',
+    'Lakshman Rao','Madhavi Latha','Nagarjuna Reddy','Obulesh Babu','Prabhakar Rao',
+    'Qasim Raza','Renuka Devi','Shankar Reddy','Thrilok Kumar','Uma Devi',
+    'Vijayalakshmi','Waseem Akram','Yaswanth Reddy','Zeenath Fatima','Arun Kumar',
+    'Bhagya Sri','Chitra Devi','Damodhar Rao','Eeranna Reddy','Fathima Bee',
+    'Girija Shankar','Hemanth Kumar','Irfan Sai','Jeevan Sai','Kiran Sai'
+]);
+addStudents('0301', 'EEE', [
+    'Akhil Kumar','Bhavana Reddy','Chakri Babu','Dinesh Reddy','Eerla Suresh',
+    'Farhan Ali','Gouthami Sri','Hari Charan','Ilaiah Kumar','Jayanth Reddy',
+    'Kalyani Priya','Linga Reddy','Mounika Devi','Nagaraju Babu','Obulesu Kumar',
+    'Prasanth Reddy','Qurat-ul-Ain','Rama Devi','Suresh Kumar','Thirupathi Rao',
+    'Usha Devi','Venkat Reddy','Wardha Begum','Yellapu Reddy','Zarina Bee',
+    'Anudeep Kumar','Bhaskar Rao','Chandana Sri','Durga Rao','Eswaraiah K',
+    'Firoz Basha','Gayathri Devi','Hanumanthu R','Ibrahim Khan','Jyothi Reddy',
+    'Krishna Murthy','Lakshmi Narayana','Madhu Sudhana','Nageswara Rao','Pavani Sri',
+    'Raghavendra R','Siva Ramulu','Triveni Devi','Udaya Bhaskar','Vijaya Kumar',
+    'Wahid Basha','Yasaswi Reddy','Zaffer Basha','Anusha Kumar','Bhupal Reddy',
+    'Chandra Sekhar','Devi Prasad','Elugu Ravi','Farida Begum','Giri Babu',
+    'Harika Sri','Iswarya Devi','Leo Sai','Mahi Sai','Nani Sai','Pandu Sai',
+    'Ramu Sai','Shankar Sai','Tabbu Sai','Anand Kumar','Bhargavi Devi',
+    'Chandra Mouli','Divya Lakshmi','Eswar Prasad','Fathima Khan','Ganesh Kumar'
+]);
+addStudents('1001', 'MECH', [
+    'Abhiram Reddy','Bala Murali','Chandra Shekar','Dasaradh Reddy','Eswara Rao',
+    'Farooq Ahmed','Ganesh Reddy','Hemanth Reddy','Iliyas Khan','Javed Basha',
+    'Konda Reddy','Laxmi Kanth','Malla Reddy','Narsimha Reddy','Omkar Reddy',
+    'Pavan Kumar','Qamar Hussain','Raja Shekhar','Sambaiah Reddy','Thirumala Reddy',
+    'Uday Kiran','Vamsi Reddy','Waseem Shah','Yadaiah Reddy','Zubair Vali',
+    'Anil Reddy','Bhaskar Reddy','Chennakesava R','Durga Prasad','Eeda Suresh',
+    'Firoz Basha','Gayathri Devi','Hanumanthu R','Ibrahim Khan','Jyothi Reddy',
+    'Krishna Murthy','Lakshmi Narayana','Madhu Sudhana','Nageswara Rao','Pavani Sri',
+    'Raghavendra R','Siva Ramulu','Triveni Devi','Udaya Bhaskar','Vijaya Kumar',
+    'Wahid Basha','Yasaswi Reddy','Zaffer Basha','Anusha Kumar','Bhupal Reddy',
+    'Chandra Sekhar','Devi Prasad','Elugu Ravi','Farida Begum','Giri Babu',
+    'Harika Sri','Iswarya Devi','Kondaiah B','Lakshmamma D','Malla Reddy'
+]);
+addStudents('1301', 'CIVIL', [
+    'Ayyappa Reddy','Bhagya Laxmi','Chandra Kanth','Dhanalakshmi D','Eswari Bai',
+    'Fatima Khatoon','Ganapathi Reddy','Hanumakonda R','Indira Kumari','Janga Reddy',
+    'Kalavathi Devi','Lakshmana Reddy','Mallika Devi','Narayana Reddy','Omkari Devi',
+    'Pothula Reddy','Qamar Jahan','Raghuram Reddy','Subba Reddy','Thimmappa Naidu',
+    'Usha Kumari','Vijaya Nirmala','Wahida Begum','Yadagiri Reddy','Zareena Bee',
+    'Ananta Reddy','Buchi Reddy','Chilukuri Devi','Donthu Reddy','Elisetty R',
+    'Guduru Reddy','Hanumanth Reddy','Imam Saheb','Jammula Reddy','Kandula Reddy',
+    'Lakshmi Devi','Muthyala Reddy','Nallapu Reddy','Peda Reddy','Rachakonda R',
+    'Siddhardha Reddy','Thota Naidu','Uppunutla Reddy','Veerabhadra R','Wadiyar Reddy',
+    'Yerrabelly Reddy','Zubeda Bee','Akula Reddy','Burra Reddy','Chintala Reddy',
+    'Dokula Reddy','Erra Reddy','Gajjala Reddy','Hanji Reddy','Illa Reddy',
+    'Juturu Reddy','Koppula Reddy','Lakkidi Reddy','Maddi Reddy','Nadikuda Reddy',
+    'Puli Reddy','Reddigari Reddy','Sangam Reddy','Thuraka Reddy'
+]);
+addStudents('3101', 'IT', [
+    'Abhilash Reddy','Bhanu Sri','Charan Reddy','Dharani Priya','Eswar Sai',
+    'Farhana Begum','Gopinath Reddy','Hari Sai','Ishaq Basha','Jahnavi Sri',
+    'Kiran Sai','Lavanya Reddy','Mani Kumar','Naga Sri','Omkar Sai',
+    'Pavan Sai','Qadir Ali','Ramya Sri','Sai Kumar','Tarun Reddy',
+    'Uma Sai','Vamsi Sai','Wasim Akram','Yashwanth Sai','Zeenath Sultana',
+    'Anudeep Sai','Bhavana Sai','Chakri Sai','Divya Sai','Eerla Sai',
+    'Goutham Sai','Harsha Sai','Isha Sai','Jai Sai','Karthik Sai',
+    'Likhith Sai','Mohan Sai','Nithin Sai','Ooha Sai','Pranav Sai','Rithik Sai',
+    'Sujith Sai','Tanuj Sai','Uday Sai','Vishal Sai','Walter Sai','Yash Sai',
+    'Zoya Sai','Arjun Sai','Bala Sai','Charan Sai','Deepak Sai','Eswar Sai',
+    'Farhan Sai','Giri Sai','Hemanth Sai','Irfan Sai','Jagadeesh Sai','Kumar Sai',
+    'Lakshman Sai','Murali Sai','Naveen Sai','Pradeep Sai','Raju Sai','Suresh Sai',
+    'Tharun Sai','Abhi Sai','Bobby Sai','Cherry Sai','Don Sai'
+]);
+addStudents('0601', 'AI/ML', [
+    'Aadhya Reddy','Bhavani Shankar','Chaitanya Reddy','Dinesh Sai','Eshwar Reddy',
+    'Farheen Sultana','Girish Kumar','Himabindu Sri','Ishaan Reddy','Janaki Devi',
+    'Kavya Sri','Lalith Kumar','Meghana Reddy','Nithish Kumar','Oorvasi Reddy',
+    'Praneeth Reddy','Qasim Basha','Rakshitha Reddy','Sai Prasad','Tejaswi Reddy',
+    'Ujjwal Kumar','Vaishnavi Reddy','Wajid Khan','Yamini Reddy','Zaheer Basha',
+    'Ankith Reddy','Bhuvana Sri','Chandra Sai','Durga Sai','Eshwar Sai',
+    'Gana Sai','Hari Sai','Indira Sai','Jagan Sai','Kalyan Sai',
+    'Lohith Sai','Mounika Sai','Nagasai','Prasad Sai','Ravi Sai','Sai Ram',
+    'Tharun Sai','Usha Sai','Vamsi Sai','Waseem Sai','Yash Sai','Zain Sai',
+    'Abhi Sai','Bobby Sai','Cherry Sai','Don Sai','Eshwar Sai','Fazil Sai',
+    'Gokul Sai','Hari Sai','Irfan Sai','Jeevan Sai','Kiran Sai','Leo Sai',
+    'Mahi Sai','Nani Sai','Pandu Sai','Ramu Sai','Shankar Sai','Tabbu Sai',
+    'Anand Kumar','Bhargavi Devi','Chandra Mouli','Divya Lakshmi','Eswar Prasad',
+    'Fathima Khan','Ganesh Kumar','Harika Devi','Ibrahim Khan','Jayanthi Devi'
+]);
+addStudents('5701', 'MBA', [
+    'Anand Kumar','Bhargavi Devi','Chandra Mouli','Divya Lakshmi','Eswar Prasad',
+    'Fathima Khan','Ganesh Kumar','Harika Devi','Ibrahim Khan','Jayanthi Devi',
+    'Kumar Raju','Lalitha Priya','Mahesh Babu','Nagaratna Devi','Omkar Prasad',
+    'Padmavathi Devi','Ramesh Babu','Sujatha Devi','Thirupathi B','Usha Devi',
+    'Venkat Prasad','Wahida Begum','Yadagiri B','Zareena Khan','Annapurna Devi',
+    'Bhaskar Rao','Chandra Devi','Durga Rao','Eswara Devi','Farooq Basha',
+    'Girija Devi','Harish Babu','Ilaiah B','Jyothi Devi','Kondaiah B',
+    'Lakshmamma D','Malla Reddy'
+]);
+
+// ============================================================
+//  BOOK DATABASE
+// ============================================================
+const books = [
+    {branch:"cse",title:"Data Structures",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/ost-computer-science-datastructures"},
+    {branch:"cse",title:"Operating Systems",sub:"NPTEL   IIT Delhi",url:"https://archive.org/details/ost-computer-science-operatingsystems"},
+    {branch:"cse",title:"Computer Networks",sub:"NPTEL   IIT Kanpur",url:"https://archive.org/details/ComputerNetworkingATopDownApproach"},
+    {branch:"cse",title:"Database Management",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/database-management-systems_202109"},
+    {branch:"cse",title:"Compiler Design",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/compilers-principles-techniques-tools"},
+    {branch:"cse",title:"Theory of Computation",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/introduction-to-theory-of-computation"},
+    {branch:"cse",title:"Software Engineering",sub:"NPTEL   IIT Kharagpur",url:"https://archive.org/details/software-engineering_202201"},
+    {branch:"cse",title:"Computer Organization",sub:"NPTEL   IIT Delhi",url:"https://archive.org/details/computer-organization-and-design"},
+    {branch:"cse",title:"Design & Analysis of Algorithms",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/introduction-to-algorithms_202101"},
+    {branch:"cse",title:"Web Technologies",sub:"NPTEL   IIT Kharagpur",url:"https://archive.org/details/web-technologies_202009"},
+    {branch:"it",title:"Information Security",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/information-security-principles-and-practice"},
+    {branch:"it",title:"Cloud Computing",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/cloud-computing_202103"},
+    {branch:"it",title:"Data Warehousing & Mining",sub:"NPTEL   IIT Kharagpur",url:"https://archive.org/details/data-mining-concepts-and-techniques"},
+    {branch:"it",title:"Mobile Computing",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/mobile-computing_202011"},
+    {branch:"it",title:"Unix & Shell Programming",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/unix-shell-programming"},
+    {branch:"it",title:"Python Programming",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/python-programming_202106"},
+    {branch:"it",title:"Big Data Analytics",sub:"NPTEL   IIT Kharagpur",url:"https://archive.org/details/big-data-analytics_202201"},
+    {branch:"aiml",title:"Machine Learning",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/machine-learning-tom-mitchell"},
+    {branch:"aiml",title:"Artificial Intelligence",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/artificial-intelligence-a-modern-approach"},
+    {branch:"aiml",title:"Deep Learning",sub:"NPTEL   IIT Kharagpur",url:"https://archive.org/details/deep-learning_202108"},
+    {branch:"aiml",title:"Natural Language Processing",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/natural-language-processing_202202"},
+    {branch:"aiml",title:"Neural Networks",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/neural-networks-and-deep-learning"},
+    {branch:"aiml",title:"Computer Vision",sub:"NPTEL   IIT Hyderabad",url:"https://archive.org/details/computer-vision_202103"},
+    {branch:"aiml",title:"Reinforcement Learning",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/reinforcement-learning_202109"},
+    {branch:"ece",title:"Signals & Systems",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/signals-and-systems_202010"},
+    {branch:"ece",title:"Digital Signal Processing",sub:"NPTEL   IIT Delhi",url:"https://archive.org/details/digital-signal-processing_202101"},
+    {branch:"ece",title:"Analog Electronics",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/analog-electronics_202009"},
+    {branch:"ece",title:"Digital Electronics",sub:"NPTEL   IIT Kharagpur",url:"https://archive.org/details/digital-electronics_202107"},
+    {branch:"ece",title:"Communication Systems",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/communication-systems_202203"},
+    {branch:"ece",title:"VLSI Design",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/vlsi-design_202110"},
+    {branch:"ece",title:"Microwave Engineering",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/microwave-engineering_202103"},
+    {branch:"ece",title:"Control Systems",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/control-systems_202109"},
+    {branch:"eee",title:"Electric Circuits",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/electric-circuits_202009"},
+    {branch:"eee",title:"Power Systems",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/power-system-analysis_202107"},
+    {branch:"eee",title:"Electrical Machines",sub:"NPTEL   IIT Delhi",url:"https://archive.org/details/electrical-machines_202102"},
+    {branch:"eee",title:"Power Electronics",sub:"NPTEL   IIT Kharagpur",url:"https://archive.org/details/power-electronics_202109"},
+    {branch:"eee",title:"Control Systems Engineering",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/control-systems-engineering_202103"},
+    {branch:"eee",title:"High Voltage Engineering",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/high-voltage-engineering_202201"},
+    {branch:"eee",title:"Renewable Energy Systems",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/renewable-energy-systems_202110"},
+    {branch:"mech",title:"Thermodynamics",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/thermodynamics-an-engineering-approach"},
+    {branch:"mech",title:"Fluid Mechanics",sub:"NPTEL   IIT Kanpur",url:"https://archive.org/details/fluid-mechanics_202011"},
+    {branch:"mech",title:"Strength of Materials",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/strength-of-materials_202103"},
+    {branch:"mech",title:"Manufacturing Technology",sub:"NPTEL   IIT Kharagpur",url:"https://archive.org/details/manufacturing-technology_202109"},
+    {branch:"mech",title:"Machine Design",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/machine-design_202102"},
+    {branch:"mech",title:"Heat Transfer",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/heat-transfer_202107"},
+    {branch:"mech",title:"Theory of Machines",sub:"NPTEL   IIT Delhi",url:"https://archive.org/details/theory-of-machines_202201"},
+    {branch:"mech",title:"CAD/CAM",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/cad-cam_202110"},
+    {branch:"civil",title:"Structural Analysis",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/structural-analysis_202009"},
+    {branch:"civil",title:"Surveying",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/surveying_202103"},
+    {branch:"civil",title:"Geotechnical Engineering",sub:"NPTEL   IIT Kharagpur",url:"https://archive.org/details/geotechnical-engineering_202107"},
+    {branch:"civil",title:"Concrete Technology",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/concrete-technology_202109"},
+    {branch:"civil",title:"Hydraulics",sub:"NPTEL   IIT Kanpur",url:"https://archive.org/details/hydraulics_202102"},
+    {branch:"civil",title:"Transportation Engineering",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/transportation-engineering_202110"},
+    {branch:"civil",title:"Environmental Engineering",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/environmental-engineering_202201"},
+    {branch:"civil",title:"Construction Management",sub:"NPTEL   IIT Delhi",url:"https://archive.org/details/construction-management_202103"},
+    {branch:"mba",title:"Financial Management",sub:"NPTEL   IIT Kharagpur",url:"https://archive.org/details/financial-management_202009"},
+    {branch:"mba",title:"Marketing Management",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/marketing-management_202103"},
+    {branch:"mba",title:"Human Resource Management",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/human-resource-management_202107"},
+    {branch:"mba",title:"Operations Management",sub:"NPTEL   IIT Delhi",url:"https://archive.org/details/operations-management_202109"},
+    {branch:"mba",title:"Business Statistics",sub:"NPTEL   IIT Kharagpur",url:"https://archive.org/details/business-statistics_202102"},
+    {branch:"mba",title:"Organizational Behaviour",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/organizational-behaviour_202110"},
+    {branch:"common",title:"Engineering Mathematics - I",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/engineering-mathematics-1_202009"},
+    {branch:"common",title:"Engineering Mathematics - II",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/engineering-mathematics-2_202103"},
+    {branch:"common",title:"Engineering Mathematics - III",sub:"NPTEL   IIT Delhi",url:"https://archive.org/details/engineering-mathematics-3_202107"},
+    {branch:"common",title:"Engineering Physics",sub:"NPTEL   IIT Kanpur",url:"https://archive.org/details/engineering-physics_202109"},
+    {branch:"common",title:"Engineering Chemistry",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/engineering-chemistry_202102"},
+    {branch:"common",title:"Engineering Drawing",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/engineering-drawing_202110"},
+    {branch:"common",title:"English Communication",sub:"NPTEL   IIT Kharagpur",url:"https://archive.org/details/english-communication_202201"},
+    {branch:"common",title:"Discrete Mathematics",sub:"NPTEL   IIT Madras",url:"https://archive.org/details/discrete-mathematics_202103"},
+    {branch:"common",title:"Probability & Statistics",sub:"NPTEL   IIT Bombay",url:"https://archive.org/details/probability-and-statistics_202107"},
+    {branch:"common",title:"Environmental Science",sub:"NPTEL   IIT Delhi",url:"https://archive.org/details/environmental-science_202109"},
+];
+
+const branchMeta = {
+    cse:{name:"CSE Department",icon:"fa-laptop-code",theme:"theme-cse",bg:"bg-cse"},
+    it:{name:"Information Technology",icon:"fa-network-wired",theme:"theme-it",bg:"bg-it"},
+    aiml:{name:"AI & Machine Learning",icon:"fa-robot",theme:"theme-aiml",bg:"bg-aiml"},
+    ece:{name:"ECE Department",icon:"fa-broadcast-tower",theme:"theme-ece",bg:"bg-ece"},
+    eee:{name:"EEE Department",icon:"fa-bolt",theme:"theme-eee",bg:"bg-eee"},
+    mech:{name:"Mechanical Department",icon:"fa-cogs",theme:"theme-mech",bg:"bg-mech"},
+    civil:{name:"Civil Department",icon:"fa-hard-hat",theme:"theme-civil",bg:"bg-civil"},
+    mba:{name:"MBA Department",icon:"fa-chart-line",theme:"theme-mba",bg:"bg-mba"},
+    common:{name:"Common Subjects",icon:"fa-book",theme:"theme-common",bg:"bg-common"},
+};
+
+// ============================================================
+//  LOGIN MODAL   Open / Close
+// ============================================================
+let isLoggedIn = false;
+let sessionInterval = null;
+let sessionSeconds = 0;
+
+function openLogin() {
+    if(isLoggedIn) return;
+    document.getElementById('loginOverlay').classList.add('visible');
+}
+function closeLogin() {
+    document.getElementById('loginOverlay').classList.remove('visible');
+    clearErrors();
+}
+
+// Close modal on backdrop click
+document.getElementById('loginOverlay').addEventListener('click', function(e) {
+    if(e.target === this) closeLogin();
+});
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+    if(e.key === 'Escape') closeLogin();
+});
+
+function fillCreds(r,p){ document.getElementById("rollNo").value=r; document.getElementById("password").value=p; clearErrors(); }
+function togglePassword(){ const i=document.getElementById("password"),ic=document.getElementById("eyeIcon"); i.type=i.type==="password"?"text":"password"; ic.className=i.type==="password"?"fas fa-eye":"fas fa-eye-slash"; }
+function clearErrors(){ document.querySelectorAll(".error-msg").forEach(e=>e.classList.remove("show")); document.querySelectorAll(".form-input").forEach(e=>e.classList.remove("error")); }
+function showError(id,msg){ const el=document.getElementById(id); el.querySelector("span").textContent=msg; el.classList.add("show"); el.parentElement.querySelector(".form-input").classList.add("error"); }
+
+function handleLogin(e){
+    e.preventDefault(); clearErrors();
+    const roll = document.getElementById("rollNo").value.trim().toUpperCase();
+    const pass = document.getElementById("password").value;
+    const btn = document.getElementById("loginBtn");
+
+    if(!/^249Y1A[0-9A-Z]{4}$/.test(roll)){ showError("rollError","Invalid format. Must be: 249Y1A0502"); return false; }
+    if(pass.length < 4){ showError("passError","Password must be at least 4 characters"); return false; }
+
+    btn.classList.add("loading");
+    setTimeout(()=>{
+        const student = students.find(s => s.roll === roll && s.password === pass);
+        if(!student){
+            btn.classList.remove("loading");
+            showError("passError","Invalid roll number or password");
+            const card = document.querySelector(".login-card");
+            card.style.animation = "none"; card.offsetHeight; card.style.animation = "shake .5s ease";
+            return;
+        }
+
+        const session = { roll: student.roll, name: student.name, branch: student.branch, year: student.year, section: student.section, loginTime: Date.now() };
+        localStorage.setItem("ksrm_session", JSON.stringify(session));
+        btn.classList.remove("loading");
+        btn.innerHTML = '<span class="btn-text"><i class="fas fa-check"></i> Login Successful!</span>';
+        btn.style.background = "linear-gradient(135deg,#43e97b 0%,#38f9d7 100%)";
+
+        setTimeout(()=>{
+            closeLogin();
+            setLoggedInState(session);
+            showToast("Welcome, " + student.name + "!");
+        }, 700);
+    }, 1200);
+    return false;
+}
+
+function setLoggedInState(s){
+    isLoggedIn = true;
+    document.getElementById("userAvatar").textContent = s.name.charAt(0);
+    document.getElementById("userName").textContent = s.name;
+    document.getElementById("userMeta").textContent = s.roll + " \u2022 " + s.branch + " \u2022 " + s.year;
+    document.getElementById("loginTriggerBtn").style.display = "none";
+    document.getElementById("userChip").classList.add("show");
+    document.getElementById("logoutBtn").classList.add("show");
+    document.getElementById("sessionTimerWrap").classList.add("show");
+    startSessionTimer();
+}
+
+function handleLogout(){
+    isLoggedIn = false;
+    clearInterval(sessionInterval);
+    localStorage.removeItem("ksrm_session");
+    document.getElementById("loginForm").reset();
+    const btn = document.getElementById("loginBtn");
+    btn.innerHTML = '<span class="btn-text"><i class="fas fa-sign-in-alt"></i> Login to Library</span>';
+    btn.style.background = "linear-gradient(135deg,#667eea 0%,#764ba2 100%)";
+    document.getElementById("loginTriggerBtn").style.display = "flex";
+    document.getElementById("userChip").classList.remove("show");
+    document.getElementById("logoutBtn").classList.remove("show");
+    document.getElementById("sessionTimerWrap").classList.remove("show");
+    sessionSeconds = 0;
+    document.getElementById("sessionTimer").textContent = "Session: 00:00";
+    showToast("Logged out successfully");
+}
+
+function startSessionTimer(){
+    sessionSeconds = 0; clearInterval(sessionInterval);
+    sessionInterval = setInterval(()=>{
+        sessionSeconds++;
+        const m = String(Math.floor(sessionSeconds/60)).padStart(2,"0");
+        const s = String(sessionSeconds%60).padStart(2,"0");
+        document.getElementById("sessionTimer").textContent = "Session: " + m + ":" + s;
+    }, 1000);
+}
+
+// Auto-restore session on page load
+(function(){
+    const saved = localStorage.getItem("ksrm_session");
+    if(saved){
+        try{
+            const s = JSON.parse(saved);
+            setLoggedInState(s);
+        }catch(e){ localStorage.removeItem("ksrm_session"); }
+    }
+})();
+
+// ============================================================
+//  RENDER BOOKS
+// ============================================================
+function renderBooks(filter, query){
+    if(!filter) filter = "all";
+    if(!query) query = "";
+    const grid = document.getElementById("bookGrid");
+    grid.innerHTML = "";
+    query = query.toLowerCase().trim();
+
+    const filtered = books.filter(b => {
+        const mb = filter === "all" || b.branch === filter;
+        const mq = !query || b.title.toLowerCase().includes(query) || b.sub.toLowerCase().includes(query);
+        return mb && mq;
+    });
+
+    if(!filtered.length){
+        grid.innerHTML = '<div class="no-results"><i class="fas fa-search"></i><p>No books found matching your search.</p></div>';
+        return;
+    }
+
+    const grouped = {};
+    filtered.forEach(b => { if(!grouped[b.branch]) grouped[b.branch] = []; grouped[b.branch].push(b); });
+
+    Object.keys(grouped).forEach((branch, idx) => {
+        const meta = branchMeta[branch];
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const items = grouped[branch].map(b =>
+            '<a href="' + b.url + '" target="_blank" rel="noopener" class="book-item" onclick="showToast(\'Opening: ' + b.title + '\')">' +
+            '<div class="book-icon ' + meta.bg + '"><i class="fas fa-file-pdf"></i></div>' +
+            '<div class="book-info"><h3>' + b.title + '</h3><p>' + b.sub + '</p></div>' +
+            '<div class="book-arrow"><i class="fas fa-chevron-right"></i></div></a>'
+        ).join("");
+
+        card.innerHTML =
+            '<div class="card-header ' + meta.theme + '"><i class="fas ' + meta.icon + '"></i> ' + meta.name +
+            '<span class="card-count">' + grouped[branch].length + ' books</span></div>' +
+            '<div class="card-body">' + items + '</div>';
+
+        grid.appendChild(card);
+
+        // Staggered card entrance animation
+        setTimeout(() => { card.classList.add("visible"); }, 80 * idx);
+    });
+}
+
+function searchBooks(){
+    const q = document.getElementById("searchInput").value;
+    const af = document.querySelector(".nav-btn.active")?.dataset.filter || "all";
+    renderBooks(af, q);
+}
+
+document.getElementById("searchInput").addEventListener("keyup", function(e){
+    if(e.key === "Enter") searchBooks();
+    clearTimeout(this._d);
+    this._d = setTimeout(searchBooks, 300);
+});
+
+document.querySelectorAll(".nav-btn").forEach(b => {
+    b.addEventListener("click", function(){
+        document.querySelectorAll(".nav-btn").forEach(x => x.classList.remove("active"));
+        this.classList.add("active");
+        document.getElementById("searchInput").value = "";
+        renderBooks(this.dataset.filter);
+    });
+});
+
+// ============================================================
+//  UTILITIES
+// ============================================================
+function showToast(msg){
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 2500);
+}
+
+window.addEventListener("scroll", function(){
+    document.getElementById("backTop").style.display = this.scrollY > 400 ? "flex" : "none";
+});
+
+function animateCount(el, target){
+    let c = 0;
+    const step = Math.ceil(target / 40);
+    const t = setInterval(()=>{
+        c += step;
+        if(c >= target){ c = target; clearInterval(t); }
+        el.textContent = c + "+";
+    }, 40);
+}
+
+// ============================================================
+//  INIT   books visible immediately on page load
+// ============================================================
+renderBooks("all");
+animateCount(document.getElementById("bookCount"), books.length);
+</script>
+</body>
+</html>
